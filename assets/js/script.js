@@ -3,8 +3,9 @@ const nextBtn = document.getElementById("next-btn");
 const questionContainer = document.getElementById("question-container");
 const questionEl = document.getElementById('question')
 const questionAnswers = document.getElementById("question-answers");
-const timer = document.getElementById("timer");
 const choicesList = document.getElementById("choices");
+const info = document.getElementById('info');
+const timer = document.getElementById("timer");
 const submitBtn = document.getElementById("submit");
 const nameInitials = document.getElementById("initials");
 let shuffled;
@@ -40,14 +41,15 @@ const questions = [
 
 
 startBtn.addEventListener("click", quizStart)
-nextButton.addEventListener("click",()=> {
+nextBtn.addEventListener("click",()=> {
  currentIndex++
  setNextQuestion()
 })  
 
 function quizStart() { 
- console.log('started')
- startBtn.classList.add('hide') 
+ alert ('game start!')
+ startBtn.classList.add('hide')
+ info.classList.add('hide') 
  shuffled = questions.sort(()=> Math.random() - .5)
  currentIndex = 0
  questionContainer.classList.remove('hide')
@@ -91,7 +93,7 @@ function selectAnswer(event){
  if (shuffled.length> currentIndex + 1){
  nextButton.classList.remove('hide')
 }else {
- startBtn.innerText = ('Restart')
+ startBtn.innerText = ('restart')
  startBtn.classList.remove ('hide')
 }
 
@@ -108,4 +110,5 @@ function setStatusClass(element, correct)
 function clearStatusClass(element){
  element.classList.remove('correct')
  element.classList.remove('wrong')
+}
 }
