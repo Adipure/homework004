@@ -7,8 +7,8 @@ const timer = document.getElementById("timer");
 const choicesList = document.getElementById("choices");
 const submitBtn = document.getElementById("submit");
 const nameInitials = document.getElementById("initials");
-let shuffled
-let currentIndex
+let shuffled;
+let currentIndex;
 const questions = [
  {
   question: "Which of the following is correct about features of JavaScript?",
@@ -38,7 +38,12 @@ const questions = [
 ]
 
 
-startBtn.addEventListener("click", quizStart);
+
+startBtn.addEventListener("click", quizStart)
+nextButton.addEventListener("click",()=> {
+ currentIndex++
+ setNextQuestion()
+})  
 
 function quizStart() { 
  console.log('started')
@@ -57,7 +62,7 @@ function showQuestion(question){
  question.answer.forEach(answer => {
   const button = document.createElement('button')
   button.innerText = answer.text
-  button.classList.add('btn')
+  button.classList.add('btn')   
   if (answer.correct){
    button.dataset.corret = answer.correct
   }
@@ -67,25 +72,40 @@ function showQuestion(question){
 
 }
 function resetState( ){
+ clearStatusClass(document.body)
  nextButton.classList.add('hide')
- while(answerButtonEl.firstChild){
+ while(answerButtonEl.firstChild)
+ {
   answerButtonEl.removeChild
   (answerButtonEl.firstChild)
  }
 }
 
-function selectAnswer(){
- const selectedButton = e.target
+function selectAnswer(event){
+ const selectedButton = event.target
  const correct = selectedButton.dataset.correct
  setStatusClass (document.body, correct)
  Array.from(answerButtonEl.children).forEach(button => {
   setStatusClass(button, button.dataset.correct)
- });
+ })
+ if (shuffled.length> currentIndex + 1){
+ nextButton.classList.remove('hide')
+}else {
+ startBtn.innerText = ('Restart')
+ startBtn.classList.remove ('hide')
 }
 
-function setStatusClass(element, correct) {
- clearStatusclass(element)
- if (correct){
-  element.classList.add('correct')
- }else
+function setStatusClass(element, correct) 
+{
+ clearStatusClass(element)
+ if (correct){ 
+  element.classList.add ('correct')
+ } 
+ else{
+ element.classList.add('wrong')
+ }
+}
+function clearStatusClass(element){
+ element.classList.remove('correct')
+ element.classList.remove('wrong')
 }
