@@ -1,0 +1,58 @@
+*, * ::before, *::after {
+ box-sizing: border-box;
+}
+
+body {
+ padding: 0;
+ margin: 0;
+ display: flex;
+ width: 100vw;
+ height: 100vh;
+ justify-content: center;
+ align-items: center;
+ font-family: 'Open Sans', sans-serif bold;
+ font-family: 'Raleway', sans-serif bold;
+}
+
+.container {
+ width: 800px;
+ max-width: 80%;
+ background-color: white;
+ border-radius: 5px;
+ -webkit-border-radius: 5px;
+ -moz-border-radius: 5px;
+ -ms-border-radius: 5px;
+ -o-border-radius: 5px;
+ padding: 10px;
+ box-shadow: 0 0 10px 5px;
+}
+
+.btn-grid {
+ display: grid;
+ grid-template-columns: repeat(2, auto);
+ gap: 10px;
+ margin: 20px 0;
+}
+
+.btn {
+ color: black;
+ border: 1px solid;
+ border-radius: 5px;
+ background-color: whitesmoke;
+ -webkit-border-radius: 5px;
+ -moz-border-radius: 5px;
+ -ms-border-radius: 5px;
+ -o-border-radius: 5px;
+ padding : 5px 10px;
+ outline:none;
+}
+.controls {
+ display : flex;
+ justify-content: center;
+ align-items: center;
+
+
+}
+.hide {
+ display:none;
+}
