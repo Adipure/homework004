@@ -43,16 +43,29 @@ body {
  -moz-border-radius: 5px;
  -ms-border-radius: 5px;
  -o-border-radius: 5px;
- padding : 5px 10px;
- outline:none;
+ padding: 5px 10px;
+ outline: none;
 }
-.controls {
- display : flex;
+
+.quiz-finished {
+ display: flex;
+ justify-content: center;
+ align-items: center;
+}
+
+.highscorePage {
+ display: flex;
  justify-content: center;
  align-items: center;
 
-
 }
+
+.timer {
+ position: absolute;
+ top: 10px;
+ right: 10px;
+}
+
 .hide {
- display:none;
+ display: none;
 }

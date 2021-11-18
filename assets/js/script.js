@@ -1,19 +1,23 @@
-const startBtn = document.getElementById("start-btn");
-const nextBtn = document.getElementById("next-btn");
-const questionContainer = document.getElementById("question-container");
-const questionEl = document.getElementById('question')
-const questionAnswers = document.getElementById("question-answers");
-const choicesList = document.getElementById("choices");
-const info = document.getElementById('info');
-const timer = document.getElementById("timer");
+const questionsEl = document.getElementById("questions");
+const timerEl = document.getElementById("time");
+
 const submitBtn = document.getElementById("submit");
-const nameInitials = document.getElementById("initials");
-let shuffled;
-let currentIndex;
+const startBtn = document.getElementById("start");
+const initialsEl = document.getElementById("initials")
+const feedbackEl = document.getElementById("feedback")
+let highscorePage = document.getElementById("highscorePage")
+let time = 60;
+let score = 0;
+let currentIndex = 0;
+
 const questions = [
  {
   question: "Which of the following is correct about features of JavaScript?",
-  choices: ["JavaScript is is complementary to and integrated with HTML.", "JavaScript is open and cross-platform.", "Both of the above.", "None of the above."],
+  choices: [
+   "JavaScript is is complementary to and integrated with HTML",
+   "JavaScript is open and cross-platform.",
+   "Both of the above.",
+   "None of the above."],
   answer: "Both of the above."
  },
  {
@@ -36,79 +40,146 @@ const questions = [
   choices: ["pull", "push", "join", "add"],
   answer: "push"
  },
+ {
+  question: "Inside which HTML element do we put the JavaScript?",
+  choices: ["scripting", "script", "js", "javascript"],
+  answer: "script"
+ },
+ {
+  question: "Which event occurs when the user clicks on an HTML element?",
+  choices: ["onclick", "click", "onmouseclick", "hoover"],
+  answer: "onclick"
+ },
 ]
 
 
 
-startBtn.addEventListener("click", quizStart)
-nextBtn.addEventListener("click",()=> {
- currentIndex++
- setNextQuestion()
-})  
+startBtn.onclick = startQuiz;
+function startQuiz() {
 
-function quizStart() { 
- alert ('game start!')
- startBtn.classList.add('hide')
- info.classList.add('hide') 
- shuffled = questions.sort(()=> Math.random() - .5)
- currentIndex = 0
- questionContainer.classList.remove('hide')
- setNextQuestion()
+ const mainScreenEl = document.getElementById("main-screen");
+ mainScreenEl.classList.add("hide");
+
+ questionsEl.classList.remove("hide");
+
+
+ timerId = setInterval(timer, 1000);
+
+ timerEl.textContent = time;
+
+ startQuestion();
 }
 
-function setNextQuestion(){
- showQuestion(shuffled[currentIndex])
-}
-function showQuestion(question){
- questionEl.innerText= question.question
- question.answer.forEach(answer => {
-  const button = document.createElement('button')
-  button.innerText = answer.text
-  button.classList.add('btn')   
-  if (answer.correct){
-   button.dataset.corret = answer.correct
-  }
-  button.addEventListener('click', selectAnswer)
-  answerButtonEl.appendChild(button)
+function startQuestion() {
+
+ const currentQuestion = questions[currentIndex];
+ const choicesEl = document.getElementById("choices");
+ const questionTitleEl = document.getElementById("question-screen");
+ questionTitleEl.textContent = currentQuestion.question;
+ choicesEl.innerHTML = "";
+
+ currentQuestion.choices.forEach((choices, i) => {
+
+  let choicesItems = document.createElement("button");
+  choicesItems.setAttribute("class", "choices");
+  choicesItems.setAttribute("value", choices);
+
+  choicesItems.textContent = i + 1 + ". " + choices;
+  choicesItems.onclick = questionClick;
+  choicesEl.appendChild(choicesItems);
  });
-
 }
-function resetState( ){
- clearStatusClass(document.body)
- nextButton.classList.add('hide')
- while(answerButtonEl.firstChild)
- {
-  answerButtonEl.removeChild
-  (answerButtonEl.firstChild)
+
+function questionClick() {
+
+ if (this.value !== questions[currentIndex].answer) {
+  time -= 10;
+
+  if (time < 0) {
+   time = 0;
+  }
+
+  timerEl.textContent = time;
+
+  feedbackEl.textContent = "Wrong!";
+ } else {
+  feedbackEl.textContent = "Correct!";
+ }
+
+ feedbackEl.setAttribute("class", "feedback");
+ setTimeout(function () {
+  feedbackEl.setAttribute("class", "feedback hide");
+ }, 1000);
+
+ currentIndex++;
+
+ if (currentIndex === questions.length) {
+  quizEnd();
+ } else {
+  startQuestion();
  }
 }
 
-function selectAnswer(event){
- const selectedButton = event.target
- const correct = selectedButton.dataset.correct
- setStatusClass (document.body, correct)
- Array.from(answerButtonEl.children).forEach(button => {
-  setStatusClass(button, button.dataset.correct)
- })
- if (shuffled.length> currentIndex + 1){
- nextButton.classList.remove('hide')
-}else {
- startBtn.innerText = ('restart')
- startBtn.classList.remove ('hide')
+function quizEnd() {
+
+ clearInterval(timerId);
+
+ const quizEndEl = document.getElementById("quiz-finished");
+ quizEndEl.classList.remove("hide");
+
+
+ const finalScoreEl = document.getElementById("final-score");
+ finalScoreEl.textContent = time;
+
+
+ questionsEl.classList.add("hide");
 }
 
-function setStatusClass(element, correct) 
-{
- clearStatusClass(element)
- if (correct){ 
-  element.classList.add ('correct')
- } 
- else{
- element.classList.add('wrong')
+function timer() {
+ time--;
+ timerEl.textContent = time;
+
+ if (time <= 0) {
+  quizEnd();
  }
 }
-function clearStatusClass(element){
- element.classList.remove('correct')
- element.classList.remove('wrong')
+
+const getHighscores = () => {
+ document.getElementById('highscores').innerHTML = '';
+
+ let highScores = JSON.parse(localStorage.getItem('highscore')) || []
+ // highScores.sort((a, b) => {
+ //  if (a.score < b.score) {
+ //   return 1;
+ //  } else if (a.score > b.score) {
+ //   return -1;
+ //  }
+ //  return 0;
+ // });
+ let initial = initialsEl.value
+ console.log (initial)
+ let scoreObject = { initial: initial, score: time }
+ highScores.push(scoreObject)
+ console.log(highScores)
+
+localStorage.setItem("highScores", JSON.stringify(highScores))
+
+
+ let listofHighscore = document.getElementById('highscores');
+
+ for (let i = 0; i < highScores.length; i++) {
+  let highscoreEl = document.createElement('li');
+  highscoreEl.className = "list-group-item";
+  highscoreEl.innerHTML = `Initial = ${highScores[i].initial} Your Score= ${highScores[i].score}`
+  highscorePage.append(highscoreEl)
+ }
+
+ document.getElementById('highscorePage').style.display = "";
 }
-}
+submitBtn.addEventListener("click", event => (
+ 
+ getHighscores()
+ 
+))
+
+
