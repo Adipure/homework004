@@ -148,14 +148,6 @@ const getHighscores = () => {
  document.getElementById('highscores').innerHTML = '';
 
  let highScores = JSON.parse(localStorage.getItem('highscore')) || []
- // highScores.sort((a, b) => {
- //  if (a.score < b.score) {
- //   return 1;
- //  } else if (a.score > b.score) {
- //   return -1;
- //  }
- //  return 0;
- // });
  let initial = initialsEl.value
  console.log (initial)
  let scoreObject = { initial: initial, score: time }
